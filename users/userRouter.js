@@ -14,7 +14,7 @@ router.post("/", validateUser, async (req, res) => {
     } catch (error) {
       res.status(500).json({
         success: false,
-        error: "There was an error while saving the post to the database."
+        error: "Error saving user."
       });
     }
   });
@@ -89,7 +89,9 @@ async function validateUserId (req, res, next) {
 };
 
 function validateUser(req, res, next) {
-console.log(req.body.name)
+console.log(req.body)
+
+
     if (!req.body) {
        
         res.status(400).json({
