@@ -37,9 +37,20 @@ router.get('/', async (req, res) => {
 
 });
 
-// router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, async (req, res) => {
 
-// });
+try {
+    const user = await Users.getById(req.params.id)
+    res.status(200).json(user)
+  } catch (error) {
+    // log error to server
+    console.log(error);
+    res.status(500).json({
+      message: 'Error retrieving the hub',
+    });
+  }
+
+});
 
 // router.get('/:id/posts', (req, res) => {
 
@@ -55,8 +66,13 @@ router.get('/', async (req, res) => {
 
 //custom middleware
 
-function validateUserId(req, res, next) {
-    
+function validateUserId (req, res, next) {
+    const user = Users.getById(req.params.id)
+    if (!user) {
+       res.status(404).json({ message: "invalid user id"});
+      } else {
+        next()
+      }
     
 };
 
