@@ -46,7 +46,7 @@ try {
     // log error to server
     console.log(error);
     res.status(500).json({
-      message: 'Error retrieving the hub',
+      message: 'Error retrieving user',
     });
   }
 
@@ -56,9 +56,21 @@ try {
 
 // });
 
-// router.delete('/:id', (req, res) => {
+router.delete('/:id',validateUserId, async (req, res) => {
+    try {
+        const userid = await Users.remove(req.params.id);
+         (userid) 
+          res.status(200).json({ message: 'User has been removed' });
+        
+      } catch (error) {
+       
+        res.status(500).json({
+          message: 'Error removing user',
+        });
+      }
+   
 
-// });
+});
 
 // router.put('/:id', (req, res) => {
 
@@ -66,8 +78,8 @@ try {
 
 //custom middleware
 
-function validateUserId (req, res, next) {
-    const user = Users.getById(req.params.id)
+async function validateUserId (req, res, next) {
+    const user = await Users.getById(req.params.id)
     if (!user) {
        res.status(404).json({ message: "invalid user id"});
       } else {
