@@ -3,6 +3,7 @@ const router = express.Router();
 const Users = require("./userDb");
 router.use(express.json())
 
+
 router.post("/", validateUser, async (req, res) => {
     
     const newUser = req.body;
@@ -23,9 +24,18 @@ router.post("/", validateUser, async (req, res) => {
 
 // });
 
-// router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    try {
+        const users = await Users.get();
+        res.status(200).json(users);
+      } catch (error) {
+       
+        res.status(500).json({
+          message: 'Error retrieving users',
+        });
+      }
 
-// });
+});
 
 // router.get('/:id', (req, res) => {
 
